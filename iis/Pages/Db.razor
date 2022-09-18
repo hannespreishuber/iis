@@ -1,0 +1,15 @@
+﻿@page "/db"
+@using Models
+@inject northwindContext db
+<h3>Db</h3>
+@if (liste!=null)
+{
+    <p>@liste.Count()</p>
+}
+@code {
+    List<Customer> liste;
+    protected override void OnInitialized()
+    {
+        liste = db.Customers.ToList();
+    }
+}

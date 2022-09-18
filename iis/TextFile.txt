@@ -1,0 +1,67 @@
+﻿500.24
+system.web/identity@impersonate" ist auf "true" festgelegt.
+ <validation validateIntegratedModeConfiguration="false"/>
+
+500.30
+ System.InvalidOperationException: The Negotiate Authentication handler cannot be used on a server that directly supports Windows Authentication. Enable Windows Authentication for the server and the Negotiate Authentication handler will defer to it.
+
+ IIS Windows Auth an
+  <system.webServer>
+        <security>
+            <authentication>
+                <windowsAuthentication enabled="true" />
+            </authentication>
+        </security>
+    </system.webServer>
+
+
+    Error.
+An error occurred while processing your request.
+Request ID: 00-7d3f8f73e6f1248f2097395a2128fe0d-95a2784f8da4ba9d-00
+
+Development Mode
+Swapping to the Development environment displays detailed information about the error that occurred.
+
+The Development environment shouldn't be enabled for deployed applications. It can result in displaying sensitive information from exceptions to end users. For local debugging, enable the Development environment by setting the ASPNETCORE_ENVIRONMENT environment variable to Development and restarting the app.
+
+An unhandled exception occurred while processing the request.
+Win32Exception: Unknown error (0x89c50118)
+Unknown location
+
+SqlException: A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SNI_PN11, error: 50 - Local Database Runtime error occurred. Es kann keine automatische Instanz erstellt werden. Fehlerdetails finden Sie im Windows-Anwendungsereignisprotokoll.
+)
+
+Ein lokaler Anwendungsdatenpfad kann nicht abgerufen werden. Höchstwahrscheinlich wurde ein Benutzerprofil nicht geladen. Wenn "LocalDB" unter IIS ausgeführt wird, stellen Sie sicher, dass das Laden von Profilen für den aktuellen Benutzer aktiviert ist.
+IIS und SQL localdb applicationhost.config
+  <applicationPoolDefaults managedRuntimeVersion="v4.0">
+                <processModel identityType="ApplicationPoolIdentity"  loadUserProfile="true" setProfileEnvironment="true" />
+			
+			</applicationPoolDefaults>
+
+
+  SqlException: Cannot open database "northwind" requested by the login. The login failed.
+Login failed for user 'IIS APPPOOL\DefaultAppPool'.
+
+
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+	<system.webServer>
+		<validation validateIntegratedModeConfiguration="false" />
+		<security>
+			<authentication>
+				<anonymousAuthentication enabled="false" />
+				<windowsAuthentication enabled="true" />
+			</authentication>
+		</security>
+		<handlers>
+			<add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
+		</handlers>
+		<aspNetCore processPath="dotnet" arguments=".\iis.dll" forwardWindowsAuthToken="true"
+					stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" hostingModel="inprocess" >
+			<environmentVariables>
+				<environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Development" />
+			</environmentVariables>
+		</aspNetCore>
+	</system.webServer>
+
+</configuration>
